@@ -23,6 +23,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: "🚧 Work in Progress"
 
+      - run: echo "${{ github.ref }}"
+
       - name: Delete branch caches
         if: startsWith(github.ref, 'refs/pull/')
         uses: Friedinger/DeleteBranchCaches@v1
