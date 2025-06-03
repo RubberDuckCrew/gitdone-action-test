@@ -1,0 +1,1 @@
+Test for https://github.com/RubberDuckCrew/gitdone/pull/125
