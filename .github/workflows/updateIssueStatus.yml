@@ -2,7 +2,7 @@ name: Move Linked Issue to Review in GitHub Project
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
 
 jobs:
   update_project_status:
@@ -11,7 +11,6 @@ jobs:
       contents: read
       pull-requests: read
       issues: read
-      projectV2: write
 
     steps:
       - name: Extract linked issue number from PR body
@@ -28,7 +27,7 @@ jobs:
         id: ids
         uses: octokit/graphql-action@v2.x
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.testSecret }}
           query: |
             query($owner: String!, $repo: String!, $issueNumber: Int!, $projectId: ID!) {
               repository(owner: $owner, name: $repo) {
@@ -36,14 +35,16 @@ jobs:
                   id
                 }
               }
-              projectV2(id: $projectId) {
-                items(first: 100) {
-                  nodes {
-                    id
-                    content {
-                      ... on Issue {
-                        id
-                        number
+              node(id: $projectId) {
+                ... on ProjectV2 {
+                  items(first: 100) {
+                    nodes {
+                      id
+                        content {
+                          ... on Issue {
+                            id
+                            number
+                        }
                       }
                     }
                   }
@@ -62,14 +63,14 @@ jobs:
         id: match
         run: |
           ISSUE_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.repository.issue.id')
-          ITEM_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.projectV2.items.nodes[] | select(.content.id == "'"$ISSUE_ID"'") | .id')
+          ITEM_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.node.items.nodes[] | select(.content.id == "'"$ISSUE_ID"'") | .id')
           echo "issue_id=$ISSUE_ID" >> $GITHUB_OUTPUT
           echo "item_id=$ITEM_ID" >> $GITHUB_OUTPUT
 
       - name: Update status to "Review"
         uses: octokit/graphql-action@v2.x
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.testSecret }}
           query: |
             mutation {
               updateProjectV2ItemFieldValue(input: {
