@@ -27,7 +27,7 @@ jobs:
         id: ids
         uses: octokit/graphql-action@v2.x
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.testSecret }}
           query: |
             query($owner: String!, $repo: String!, $issueNumber: Int!, $projectId: ID!) {
               repository(owner: $owner, name: $repo) {
