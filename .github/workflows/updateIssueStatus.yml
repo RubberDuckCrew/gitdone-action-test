@@ -11,7 +11,7 @@ jobs:
       contents: read
       pull-requests: read
       issues: read
-      projectV2: write
+      projects: write
 
     steps:
       - name: Extract linked issue number from PR body
