@@ -29,7 +29,7 @@ jobs:
         with:
           token: ${{ secrets.testSecret }}
           query: |
-              query($owner: String!, $repo: String!, $issueNumber: Int!, $projectId: ID!) {
+            query($owner: String!, $repo: String!, $issueNumber: Int!, $projectId: ID!) {
               repository(owner: $owner, name: $repo) {
                 issue(number: $issueNumber) {
                   id
@@ -40,10 +40,10 @@ jobs:
                   items(first: 100) {
                     nodes {
                       id
-                      content {
-                        ... on Issue {
-                          id
-                          number
+                        content {
+                          ... on Issue {
+                            id
+                            number
                         }
                       }
                     }
