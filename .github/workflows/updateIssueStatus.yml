@@ -63,7 +63,7 @@ jobs:
         id: match
         run: |
           ISSUE_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.repository.issue.id')
-          ITEM_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.projectV2.items.nodes[] | select(.content.id == "'"$ISSUE_ID"'") | .id')
+          ITEM_ID=$(echo '${{ steps.ids.outputs.data }}' | jq -r '.node.items.nodes[] | select(.content.id == "'"$ISSUE_ID"'") | .id')
           echo "issue_id=$ISSUE_ID" >> $GITHUB_OUTPUT
           echo "item_id=$ITEM_ID" >> $GITHUB_OUTPUT
 
