@@ -68,7 +68,7 @@ jobs:
       - name: Update status to "Review"
         uses: octokit/graphql-action@v2.x
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.testSecret }}
           query: |
             mutation {
               updateProjectV2ItemFieldValue(input: {
